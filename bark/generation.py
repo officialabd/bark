@@ -1,22 +1,22 @@
 import contextlib
 import gc
 import hashlib
+import logging
 import os
 import re
-import requests
 
-from encodec import EncodecModel
 import funcy
-import logging
 import numpy as np
-from scipy.special import softmax
+import requests
 import torch
 import torch.nn.functional as F
 import tqdm
-from transformers import BertTokenizer
+from encodec import EncodecModel
 from huggingface_hub import hf_hub_download
+from scipy.special import softmax
+from transformers import BertTokenizer
 
-from .model import GPTConfig, GPT
+from .model import GPT, GPTConfig
 from .model_fine import FineGPT, FineGPTConfig
 
 if (
@@ -332,7 +332,10 @@ def preload_models(
     fine_use_small=False,
     codec_use_gpu=True,
     force_reload=False,
-):
+    cache_folder_path=CACHE_DIR
+):  
+    global CACHE_DIR
+    CACHE_DIR = cache_folder_path
     """Load all the necessary models for the pipeline."""
     if _grab_best_device() == "cpu" and (
         text_use_gpu or coarse_use_gpu or fine_use_gpu or codec_use_gpu
