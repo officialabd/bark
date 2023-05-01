@@ -83,8 +83,8 @@ CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 default_cache_dir = os.path.join(os.path.expanduser("~"), ".cache")
-CACHE_DIR = os.path.join(os.getenv("XDG_CACHE_HOME", default_cache_dir), "suno", "bark_v0")
-
+# CACHE_DIR = os.path.join(os.getenv("XDG_CACHE_HOME", default_cache_dir), "suno", "bark_v0")
+CACHE_DIR = 'server/src/models/'
 
 USE_SMALL_MODELS = os.environ.get("SUNO_USE_SMALL_MODELS", False)
 GLOBAL_ENABLE_MPS = os.environ.get("SUNO_ENABLE_MPS", False)
@@ -331,11 +331,8 @@ def preload_models(
     fine_use_gpu=True,
     fine_use_small=False,
     codec_use_gpu=True,
-    force_reload=False,
-    cache_folder_path=CACHE_DIR
+    force_reload=False
 ):  
-    global CACHE_DIR
-    CACHE_DIR = cache_folder_path
     """Load all the necessary models for the pipeline."""
     if _grab_best_device() == "cpu" and (
         text_use_gpu or coarse_use_gpu or fine_use_gpu or codec_use_gpu
